@@ -154,7 +154,7 @@ class QuickLinkSection(models.Model):
         verbose_name_plural = "Quick Links"
         ordering = ['-created_at']
 
-class QuickLinkItems(models.Model):
+class QuickLinkSectionItems(models.Model):
     section = models.ForeignKey(QuickLinkSection, on_delete=models.SET_NULL, null=True, related_name='quickLinkSectionItems')
     btn1_text = models.CharField(max_length=50, default='placeholder')
     btn1_url = models.URLField(blank=True)

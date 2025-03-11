@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CardSectionItems, CardSection, PageDetails, BannerSection, FaqSection, FaqQuestions, QuickLinkSection, QuickLinkItems, ContentSection, ContentSectionItems
+from .models import CardSectionItems, CardSection, PageDetails, BannerSection, FaqSection, FaqSectionItems, QuickLinkSection, QuickLinkSectionItems, ContentSection, ContentSectionItems
 class CardInline(admin.TabularInline):
     model = CardSectionItems
     extra = 1
@@ -23,8 +23,8 @@ class FaqSectionInline(admin.TabularInline):
     fields = ('title', 'description', 'published')
     show_change_link = True
 
-class FaqQuestionsInline(admin.TabularInline):
-    model = FaqQuestions
+class FaqSectionItemsInline(admin.TabularInline):
+    model = FaqSectionItems
     extra = 1
     fields = ('question', 'answer', 'published')
 
@@ -34,8 +34,8 @@ class QuickLinksInline(admin.TabularInline):
     fields = ('title', 'description', 'published')
     show_change_link = True
 
-class QuickLinkItemsInline(admin.TabularInline):
-    model = QuickLinkItems
+class QuickLinkSectionItemsInline(admin.TabularInline):
+    model = QuickLinkSectionItems
     extra = 1
     fields = ('btn1_text', 'btn1_url', 'btn2_text', 'btn2_url', 'btn3_text', 'btn3_url', 'published')
 
@@ -91,9 +91,9 @@ class FaqSectionAdmin(admin.ModelAdmin):
     list_filter = ('page', 'published')
     search_fields = ('title', 'description')
     autocomplete_fields = ['page']
-    inlines = [FaqQuestionsInline]
+    inlines = [FaqSectionItemsInline]
 
-@admin.register(FaqQuestions)
+@admin.register(FaqSectionItems)
 class FaqQuestionsAdmin(admin.ModelAdmin):
     list_display = ('question', 'section', 'published', 'created_at', 'updated_at')
     list_editable = ['published']
@@ -108,10 +108,10 @@ class QuickLinksAdmin(admin.ModelAdmin):
     list_filter = ('page', 'created_at', 'updated_at', 'published')
     search_fields = ('title', 'description')
     autocomplete_fields = ['page']
-    inlines = [QuickLinkItemsInline]
+    inlines = [QuickLinkSectionItemsInline]
 
-@admin.register(QuickLinkItems)
-class QuickLinkItemsAdmin(admin.ModelAdmin):
+@admin.register(QuickLinkSectionItems)
+class QuickLinkSectionItemsAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'section', 'published', 'created_at', 'updated_at')
     list_editable = ['published']
     list_filter = ('section', 'created_at', 'updated_at', 'published')
