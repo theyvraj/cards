@@ -1,53 +1,135 @@
 from django.contrib import admin
-from .models import cardSectionItems, cardSection, pageDetails, bannerSection
-
-class cardInline(admin.TabularInline):
-    model = cardSectionItems
+from .models import CardSectionItems, CardSection, PageDetails, BannerSection, FaqSection, FaqQuestions, QuickLinkSection, QuickLinkItems, ContentSection, ContentSectionItems
+class CardInline(admin.TabularInline):
+    model = CardSectionItems
     extra = 1
     fields = ('title', 'description', 'image', 'button_text', 'button_url', 'published')
 
-class cardHeadInline(admin.TabularInline):
-    model = cardSection
+class CardHeadInline(admin.TabularInline):
+    model = CardSection
     extra = 1
     fields = ('title', 'description', 'published')
     show_change_link = True
 
-class bannerSectionInline(admin.TabularInline):
-    model = bannerSection
+class BannerSectionInline(admin.TabularInline):
+    model = BannerSection
     extra = 1
     fields = ('title', 'description', 'published')
     show_change_link = True
 
-@admin.register(cardSection)
-class cardSectionAdmin(admin.ModelAdmin):
+class FaqSectionInline(admin.TabularInline):
+    model = FaqSection
+    extra = 1
+    fields = ('title', 'description', 'published')
+    show_change_link = True
+
+class FaqQuestionsInline(admin.TabularInline):
+    model = FaqQuestions
+    extra = 1
+    fields = ('question', 'answer', 'published')
+
+class QuickLinksInline(admin.TabularInline):
+    model = QuickLinkSection
+    extra = 1
+    fields = ('title', 'description', 'published')
+    show_change_link = True
+
+class QuickLinkItemsInline(admin.TabularInline):
+    model = QuickLinkItems
+    extra = 1
+    fields = ('btn1_text', 'btn1_url', 'btn2_text', 'btn2_url', 'btn3_text', 'btn3_url', 'published')
+
+class ContentSectionInline(admin.TabularInline):
+    model = ContentSection
+    extra = 1
+    fields = ('title', 'description', 'published')
+    show_change_link = True
+
+class ContentSectionItemsInline(admin.TabularInline):
+    model = ContentSectionItems
+    extra = 1
+    fields = ('title', 'description', 'published')
+
+@admin.register(CardSection)
+class CardSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'page', 'published', 'created_at', 'updated_at')    
     list_editable = ['published']
     list_filter = ('page', 'created_at', 'updated_at', 'published')
     search_fields = ('title', 'description')
     autocomplete_fields = ['page']
-    inlines = [cardInline]
+    inlines = [CardInline]
 
-@admin.register(cardSectionItems)
-class cardSectionItemsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'published', 'head', 'created_at', 'updated_at')
+@admin.register(CardSectionItems)
+class CardSectionItemsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'published', 'section', 'created_at', 'updated_at')
     list_editable = ['published']
-    list_filter = ('head', 'created_at', 'updated_at', 'published')    
+    list_filter = ('section', 'created_at', 'updated_at', 'published')
     search_fields = ('title', 'description')
-    autocomplete_fields = ['head']
+    autocomplete_fields = ['section']
 
-@admin.register(pageDetails)
+@admin.register(PageDetails)
 class PageDetailsAdmin(admin.ModelAdmin):
     list_display = ('slugs', 'title', 'published', 'created_at', 'updated_at')
     list_editable = ['published']
     list_filter = ('created_at', 'updated_at', 'published')
     search_fields = ('slugs',)
-    inlines = [cardHeadInline, bannerSectionInline]
+    inlines = [CardHeadInline, BannerSectionInline, QuickLinksInline, FaqSectionInline, ContentSectionInline]
     prepopulated_fields = {'slugs': ('title',)}
 
-@admin.register(bannerSection)
+@admin.register(BannerSection)
 class BannerSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'page', 'published', 'created_at', 'updated_at')
     list_editable = ['published']
     list_filter = ('page', 'created_at', 'updated_at', 'published')
     search_fields = ('title', 'description')
     autocomplete_fields = ['page']
+
+@admin.register(FaqSection)
+class FaqSectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'page', 'published')
+    list_editable = ['published']
+    list_filter = ('page', 'published')
+    search_fields = ('title', 'description')
+    autocomplete_fields = ['page']
+    inlines = [FaqQuestionsInline]
+
+@admin.register(FaqQuestions)
+class FaqQuestionsAdmin(admin.ModelAdmin):
+    list_display = ('question', 'section', 'published', 'created_at', 'updated_at')
+    list_editable = ['published']
+    list_filter = ('section', 'created_at', 'updated_at', 'published')
+    search_fields = ('question', 'answer')
+    autocomplete_fields = ['section']
+
+@admin.register(QuickLinkSection)
+class QuickLinksAdmin(admin.ModelAdmin):
+    list_display = ('title', 'page', 'published', 'created_at', 'updated_at')
+    list_editable = ['published']
+    list_filter = ('page', 'created_at', 'updated_at', 'published')
+    search_fields = ('title', 'description')
+    autocomplete_fields = ['page']
+    inlines = [QuickLinkItemsInline]
+
+@admin.register(QuickLinkItems)
+class QuickLinkItemsAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'section', 'published', 'created_at', 'updated_at')
+    list_editable = ['published']
+    list_filter = ('section', 'created_at', 'updated_at', 'published')
+    autocomplete_fields = ['section']
+
+@admin.register(ContentSection)
+class ContentSectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'page', 'published', 'created_at', 'updated_at')
+    list_editable = ['published']
+    list_filter = ('page', 'created_at', 'updated_at', 'published')
+    search_fields = ('title', 'description')
+    autocomplete_fields = ['page']
+    inlines = [ContentSectionItemsInline]
+
+@admin.register(ContentSectionItems)
+class ContentSectionItemsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'section', 'published', 'created_at', 'updated_at')
+    list_editable = ['published']
+    list_filter = ('section', 'created_at', 'updated_at', 'published')
+    search_fields = ('title', 'description')
+    autocomplete_fields = ['section']
