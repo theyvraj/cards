@@ -91,7 +91,7 @@ class CardSectionItems(SectionItemBaseModel):
 
 class FaqSection(SectionBaseModel, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='faqSection', null=True, blank=True)
-    description = models.CharField(max_length=500)  # Override the TextField with CharField
+    description = models.CharField(max_length=500)
 
     related_fields = ['faqSectionItems']
     
