@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Cards{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Card Collection</h1>
+    
+    <div class="row">
+        {% for card in cards %}
+            <div class="col-md-4">
+                <!-- This is our reusable card component -->
+                {% include 'cards/card_template.html' with card=card %}
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No cards available.</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

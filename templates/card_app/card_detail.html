@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ card.title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mb-4">
+                {% if card.image %}
+                    <img src="{{ card.image.url }}" class="card-img-top" alt="{{ card.title }}">
+                {% endif %}
+                
+                <div class="card-body">
+                    <h1 class="card-title">{{ card.title }}</h1>
+                    <p class="card-text">{{ card.description }}</p>
+                    
+                    {% if card.button_url %}
+                        <a href="{{ card.button_url }}" class="btn btn-primary">{{ card.button_text }}</a>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer text-muted">
+                    <small>Created: {{ card.created_at|date:"F d, Y" }}</small><br>
+                    <small>Last updated: {{ card.updated_at|date:"F d, Y" }}</small>
+                </div>
+            </div>
+            
+            <a href="{% url 'card_list' %}" class="btn btn-secondary">Back to All Cards</a>
+        </div>
+    </div>
+{% endblock %}
