@@ -27,15 +27,15 @@ class bannerSection(models.Model):
     description = models.CharField(max_length=500)
     feature_image = models.ImageField(upload_to='banner_images/', blank=True, null=True)
     feature_image_alt_text = models.CharField(max_length=255, blank=True, null=True)
-    btn1_text = models.CharField(max_length=50, default='Discover More')
+    btn1_text = models.CharField(max_length=50, default='placeholder')
     btn1_url = models.URLField(blank=True)
-    btn2_text = models.CharField(max_length=50, default='Discover More')
+    btn2_text = models.CharField(max_length=50, default='placeholder')
     btn2_url = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.text or f"Banner Section {self.id}"
+        return self.title or f"Banner Section {self.id}"
     
     class Meta:
         verbose_name = "Banner Section"

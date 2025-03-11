@@ -12,6 +12,12 @@ class cardHeadInline(admin.TabularInline):
     fields = ('title', 'description', 'published')
     show_change_link = True
 
+class bannerSectionInline(admin.TabularInline):
+    model = bannerSection
+    extra = 1
+    fields = ('title', 'description', 'published')
+    show_change_link = True
+
 @admin.register(cardSection)
 class cardSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'page', 'published', 'created_at', 'updated_at')    
@@ -35,7 +41,7 @@ class PageDetailsAdmin(admin.ModelAdmin):
     list_editable = ['published']
     list_filter = ('created_at', 'updated_at', 'published')
     search_fields = ('slugs',)
-    inlines = [cardHeadInline]
+    inlines = [cardHeadInline, bannerSectionInline]
     prepopulated_fields = {'slugs': ('title',)}
 
 @admin.register(bannerSection)
