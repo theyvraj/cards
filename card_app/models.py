@@ -1,5 +1,7 @@
 from django.db import models
-class PageDetails(models.Model):
+from .mixins import UnpublishRelatedItemsMixin
+
+class PageDetails(models.Model, UnpublishRelatedItemsMixin):
     slugs = models.CharField(max_length=200, unique=True)
     title = models.CharField(max_length=200, blank=True, null=True)
     published = models.BooleanField(default=True)
@@ -8,17 +10,10 @@ class PageDetails(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    related_fields = ['cardSection', 'faqSection', 'bannerSection', 'quickLinkSection', 'contentSection']
+
     def __str__(self):
         return self.title or self.slugs
-    
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.published:
-            self.cardSection.update(published=False)
-            self.faqSection.update(published=False)
-            self.bannerSection.update(published=False)
-            self.quickLinkSection.update(published=False)
-            self.contentSection.update(published=False)
     
     class Meta:
         verbose_name = "Page Detail"
@@ -50,21 +45,18 @@ class BannerSection(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-class CardSection(models.Model):
+class CardSection(models.Model, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='cardSection', null=True, blank=True)
     title = models.CharField(max_length=200)
     published = models.BooleanField(default=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    related_fields = ['cardSectionItems']
     
     def __str__(self):
         return self.title or f"Card Section {self.id}"
-    
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.published:
-            self.cardSectionItems.update(published=False)
     
     class Meta:
         verbose_name = "Card Section"
@@ -93,7 +85,7 @@ class CardSectionItems(models.Model):
         verbose_name_plural = "All Cards"
         ordering = ['-created_at']
 
-class FaqSection(models.Model):
+class FaqSection(models.Model, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='faqSection', null=True, blank=True)
     title = models.CharField(max_length=200)
     published = models.BooleanField(default=True)
@@ -101,14 +93,10 @@ class FaqSection(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    related_fields = ['faqSectionItems']
     def __str__(self):
         return self.title or f"FAQ Section {self.id}"
     
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.published:
-            self.faqSectionItems.update(published=False)
-
     class Meta:
         verbose_name = "FAQ"
         verbose_name_plural = "All Page FAQs"
@@ -133,7 +121,7 @@ class FaqSectionItems(models.Model):
         verbose_name_plural = "All FAQ Questions"
         ordering = ['-created_at']
 
-class QuickLinkSection(models.Model):
+class QuickLinkSection(models.Model, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='quickLinkSection', null=True, blank=True)
     title = models.CharField(max_length=200)
     published = models.BooleanField(default=True)
@@ -141,20 +129,16 @@ class QuickLinkSection(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    related_fields = ['quickLinkSectionItems']
     def __str__(self):
         return self.title or f"Quick Links {self.id}"
-    
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.published:
-            self.quickLinkSectionItems.update(published=False)
     
     class Meta:
         verbose_name = "Quick Link"
         verbose_name_plural = "Quick Links"
         ordering = ['-created_at']
 
-class QuickLinkItems(models.Model):
+class QuickLinkSectionItems(models.Model):
     section = models.ForeignKey(QuickLinkSection, on_delete=models.SET_NULL, null=True, related_name='quickLinkSectionItems')
     btn1_text = models.CharField(max_length=50, default='placeholder')
     btn1_url = models.URLField(blank=True)
@@ -187,7 +171,7 @@ class QuickLinkItems(models.Model):
         verbose_name_plural = "All Quick Link Items"
         ordering = ['-created_at']
 
-class ContentSection(models.Model):
+class ContentSection(models.Model, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='contentSection', null=True, blank=True)
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='content_images/', blank=True, null=True)
@@ -196,14 +180,11 @@ class ContentSection(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    related_fields = ['contentSectionItems']
+
     def __str__(self):
         return self.title or f"Content Section {self.id}"
     
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.published:
-            self.contentSectionItems.update(published=False)
-
     class Meta:
         verbose_name = "Content Section"
         verbose_name_plural = "Content Sections"
