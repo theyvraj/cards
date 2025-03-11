@@ -54,7 +54,7 @@ class PageDetails(PublishableModel, UnpublishRelatedItemsMixin):
 
 class BannerSection(SectionBaseModel):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='bannerSection', null=True, blank=True)
-    description = models.CharField(max_length=500)  # Override the TextField with CharField
+    description = models.CharField(max_length=500)
     feature_image = models.ImageField(upload_to='banner_images/', blank=True, null=True)
     feature_image_alt_text = models.CharField(max_length=255, blank=True, null=True)
     btn1_text = models.CharField(max_length=50, default='placeholder')
@@ -118,7 +118,7 @@ class FaqSectionItems(PublishableModel):
 
 class QuickLinkSection(SectionBaseModel, UnpublishRelatedItemsMixin):
     page = models.ForeignKey(PageDetails, on_delete=models.SET_NULL, related_name='quickLinkSection', null=True, blank=True)
-    description = models.CharField(max_length=500)  # Override the TextField with CharField
+    description = models.CharField(max_length=500)
 
     related_fields = ['quickLinkSectionItems']
     
@@ -176,4 +176,3 @@ class ContentSectionItems(SectionItemBaseModel):
         verbose_name = "Content Section Item"
         verbose_name_plural = "Content Section Items"
         ordering = ['-created_at']
-
