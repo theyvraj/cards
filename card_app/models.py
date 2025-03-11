@@ -2,7 +2,6 @@ from django.db import models
 from .mixins import UnpublishRelatedItemsMixin
 
 class TimeStampedModel(models.Model):
-    """Base model with created and updated timestamps"""
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -10,14 +9,12 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 class PublishableModel(TimeStampedModel):
-    """Base model with published field and timestamps"""
     published = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
 
 class SectionBaseModel(PublishableModel):
-    """Base model for all section models"""
     title = models.CharField(max_length=200)
     description = models.TextField()
 
@@ -28,7 +25,6 @@ class SectionBaseModel(PublishableModel):
         abstract = True
 
 class SectionItemBaseModel(PublishableModel):
-    """Base model for all section item models"""
     title = models.CharField(max_length=200)
     
     def __str__(self):
@@ -90,7 +86,7 @@ class CardSectionItems(SectionItemBaseModel):
     
     class Meta:
         verbose_name = "Card"
-        verbose_name_plural = "All Cards"
+        verbose_name_plural = "Cards"
         ordering = ['-created_at']
 
 class FaqSection(SectionBaseModel, UnpublishRelatedItemsMixin):
@@ -101,7 +97,7 @@ class FaqSection(SectionBaseModel, UnpublishRelatedItemsMixin):
     
     class Meta:
         verbose_name = "FAQ"
-        verbose_name_plural = "All Page FAQs"
+        verbose_name_plural = "Page FAQs"
         ordering = ['-created_at']
 
 class FaqSectionItems(PublishableModel):
@@ -117,7 +113,7 @@ class FaqSectionItems(PublishableModel):
     
     class Meta:
         verbose_name = "FAQ Question"
-        verbose_name_plural = "All FAQ Questions"
+        verbose_name_plural = "FAQ Questions"
         ordering = ['-created_at']
 
 class QuickLinkSection(SectionBaseModel, UnpublishRelatedItemsMixin):
@@ -158,7 +154,7 @@ class QuickLinkSectionItems(PublishableModel):
 
     class Meta:
         verbose_name = "Quick Link Item"
-        verbose_name_plural = "All Quick Link Items"
+        verbose_name_plural = "Quick Link Items"
         ordering = ['-created_at']
 
 class ContentSection(SectionBaseModel, UnpublishRelatedItemsMixin):
@@ -178,5 +174,6 @@ class ContentSectionItems(SectionItemBaseModel):
     
     class Meta:
         verbose_name = "Content Section Item"
-        verbose_name_plural = "All Content Section Items"
+        verbose_name_plural = "Content Section Items"
         ordering = ['-created_at']
+
